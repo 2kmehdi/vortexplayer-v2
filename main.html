@@ -4,75 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vortex Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --vortex-purple: #8A2BE2;
             --vortex-dark: #0f0f15;
+            --vortex-card: #1a1a24;
             --vortex-light: #f5f5f7;
         }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
         }
         body {
-            background: #000;
+            background: linear-gradient(135deg, var(--vortex-dark) 0%, #2a0a4a 100%);
             color: var(--vortex-light);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        /* Header */
-        .header {
             padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        /* Header & Logo */
+        .header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #222;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
         }
         .logo {
             display: flex;
             align-items: center;
-            font-size: 28px;
+            font-size: 2.5rem;
             font-weight: 800;
+            letter-spacing: -1px;
         }
         .logo i {
             color: var(--vortex-purple);
-            margin-right: 12px;
-            filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.7));
+            margin-right: 15px;
+            filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.7));
         }
         .logo-text {
             background: linear-gradient(45deg, #8A2BE2, #9370DB);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        /* Main Container */
-        .main-container {
-            display: flex;
-            flex: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 20px;
-            gap: 30px;
+        .nav a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s;
         }
-        @media (max-width: 1100px) {
-            .main-container {
-                flex-direction: column;
+        .nav a:hover, .nav a.active {
+            color: var(--vortex-purple);
+        }
+        /* Player Section */
+        .player-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 992px) {
+            .player-section {
+                grid-template-columns: 1fr;
             }
         }
-        /* Player */
         .player-container {
-            flex: 3;
-            background: #111;
-            border-radius: 12px;
+            background: var(--vortex-card);
+            border-radius: 20px;
             overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         .video-wrapper {
             width: 100%;
             position: relative;
-            padding-bottom: 56.25%;
-            background: #000;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: #000;
         }
         #videoFrame {
             position: absolute;
@@ -82,25 +96,39 @@
             height: 100%;
             border: none;
         }
-        .player-title {
-            padding: 20px;
-            font-size: 22px;
-            font-weight: 600;
-        }
-        /* Ad Section */
-        .ad-section {
-            flex: 1;
-            min-width: 300px;
-        }
-        .ad-container {
-            background: #111;
-            border-radius: 12px;
+        .player-info {
             padding: 25px;
+        }
+        .player-info h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .player-info .meta {
+            color: #aaa;
+            font-size: 0.95rem;
             margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .player-info .description {
+            line-height: 1.6;
+            color: #ccc;
+        }
+        /* Ad Container */
+        .ad-container {
+            background: var(--vortex-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
         }
         .ad-label {
+            font-size: 0.9rem;
             color: #888;
-            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -109,11 +137,12 @@
         .ad-label i {
             color: var(--vortex-purple);
         }
-        /* Monetag Ad Slot */
+        /* Monetag Ad Slot - You will place your code here */
         #monetag-ad-slot {
+            flex-grow: 1;
             min-height: 280px;
-            background: rgba(40, 40, 50, 0.5);
-            border-radius: 8px;
+            background: rgba(30, 30, 40, 0.7);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -122,104 +151,237 @@
             text-align: center;
             padding: 20px;
         }
-        .ad-placeholder {
-            padding: 20px;
+        /* Video List */
+        .episode-list {
+            margin-top: 30px;
         }
-        .ad-placeholder i {
-            font-size: 32px;
+        .episode-list h3 {
             margin-bottom: 15px;
-            color: #555;
+            color: white;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
         }
-        .ad-placeholder p {
-            margin: 5px 0;
+        .episodes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+        .episode-card {
+            background: rgba(40, 40, 55, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .episode-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--vortex-purple);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.2);
+        }
+        .episode-card.active {
+            border-color: var(--vortex-purple);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        .episode-thumb {
+            width: 100%;
+            height: 90px;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 2rem;
+        }
+        .episode-details {
+            padding: 12px;
+        }
+        .episode-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+        .episode-details p {
+            font-size: 0.8rem;
+            color: #aaa;
         }
         /* Footer */
         .footer {
-            padding: 20px;
             text-align: center;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #222;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid #333;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .warning-note {
+            background: rgba(255, 100, 100, 0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+        .warning-note h4 {
+            color: #ff9e9e;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="logo">
-            <i>🌀</i>
-            <span class="logo-text">VORTEX</span>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-container">
-        <!-- Player -->
-        <div class="player-container">
-            <div class="video-wrapper">
-                <iframe 
-                    id="videoFrame" 
-                    src="https://cinemaos.tech/player/240411/1/1" 
-                    allowfullscreen 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-                </iframe>
+    <div class="container">
+        <!-- Header with Vortex Logo -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-tornado"></i>
+                <span class="logo-text">VORTEX</span>
             </div>
-            <div class="player-title">
-                Dan Da Dan - Season 1 Episode 1
-            </div>
-        </div>
+            <nav class="nav">
+                <a href="#" class="active"><i class="fas fa-play-circle"></i> Stream</a>
+                <a href="#"><i class="fas fa-film"></i> Movies</a>
+                <a href="#"><i class="fas fa-tv"></i> Series</a>
+                <a href="#"><i class="fas fa-search"></i> Search</a>
+            </nav>
+        </header>
 
-        <!-- Ad Section -->
-        <aside class="ad-section">
-            <div class="ad-container">
-                <div class="ad-label">
-                    <i>📢</i> Advertisement
-                </div>
-                <!-- Monetag Ad Slot -->
-                <div id="monetag-ad-slot">
-                    <div class="ad-placeholder">
-                        <i>⚠️</i>
-                        <p><strong>Monetag Ad Slot</strong></p>
-                        <p style="font-size: 13px; margin-top: 10px;">
-                            Replace with your Monetag ad script
+        <main>
+            <!-- Main Player Section -->
+            <section class="player-section">
+                <!-- Video Player -->
+                <div class="player-container">
+                    <div class="video-wrapper">
+                        <!-- The embedded CinemaOS player -->
+                        <iframe 
+                            id="videoFrame" 
+                            src="https://cinemaos.tech/player/240411/1/1" 
+                            allowfullscreen 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                        </iframe>
+                    </div>
+                    <div class="player-info">
+                        <h1>Dan Da Dan - Season 1 Episode 1</h1>
+                        <div class="meta">
+                            <span><i class="fas fa-tv"></i> TV Series</span>
+                            <span><i class="fas fa-clock"></i> Episode 1</span>
+                            <span><i class="fas fa-hd"></i> HD</span>
+                        </div>
+                        <p class="description">
+                            Watch the first episode of the popular series "Dan Da Dan". The player is directly embedded from the CinemaOS service with support for watch party, quality selection, and subtitles.
                         </p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="ad-container">
-                <div class="ad-label">
-                    <i>ℹ️</i> Information
-                </div>
-                <div style="padding: 15px; color: #aaa; font-size: 14px; line-height: 1.5;">
-                    <p>This player embeds content from external sources.</p>
-                    <p style="margin-top: 10px;">Ads support the service.</p>
-                </div>
-            </div>
-        </aside>
-    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Vortex Streaming Platform &copy; 2025</p>
-    </footer>
+                <!-- Ad Container -->
+                <div class="ad-container">
+                    <div class="ad-label">
+                        <i class="fas fa-ad"></i> Advertisement
+                    </div>
+                    <!-- MONETAG AD SLOT - PASTE YOUR CODE HERE -->
+                    <div id="monetag-ad-slot">
+                        <!-- 
+                            REPLACE THIS ENTIRE DIV WITH YOUR MONETAG AD CODE
+                            Example of what Monetag provides:
+                            <script src="https://monetag.com/ad.js?your_publisher_id"></script>
+                            <div id="monetag-ad-container"></div>
+                        -->
+                        <div>
+                            <p><i class="fas fa-code" style="font-size: 2rem; margin-bottom: 10px;"></i></p>
+                            <p><strong>Monetag Ad Slot</strong></p>
+                            <p style="font-size: 0.8rem; margin-top: 10px;">
+                                Paste your Monetag ad script code here to display ads.
+                            </p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; font-size: 0.8rem; color: #666; text-align: center;">
+                        Ads help support Vortex and keep the service free.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Episode List -->
+            <section class="episode-list">
+                <h3><i class="fas fa-list-ol"></i> More Episodes</h3>
+                <div class="episodes">
+                    <div class="episode-card active">
+                        <div class="episode-thumb">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="episode-details">
+                            <h4>Episode 1</h4>
+                            <p>Currently Playing</p>
+                        </div>
+                    </div>
+                    <!-- More episode cards can be added here -->
+                    <div class="episode-card">
+                        <div class="episode-thumb">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="episode-details">
+                            <h4>Episode 2</h4>
+                            <p>Next episode</p>
+                        </div>
+                    </div>
+                    <div class="episode-card">
+                        <div class="episode-thumb">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="episode-details">
+                            <h4>Episode 3</h4>
+                            <p>Coming soon</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Important Note -->
+            <div class="warning-note">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Integration Note</h4>
+                <p>This page embeds the video from the provided CinemaOS URL. To activate Monetag ads:</p>
+                <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.6;">
+                    <li>Sign up at <strong>monetag.com</strong> to get your publisher ID</li>
+                    <li>Replace the content inside the <code>#monetag-ad-slot</code> div with the script code provided by Monetag</li>
+                    <li>The player URL is hardcoded to <code>https://cinemaos.tech/player/240411/1/1</code> - you can change the IDs for different content</li>
+                </ol>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Vortex Streaming Platform &copy; 2025 | Apple TV Style Interface | Powered by CinemaOS API</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">
+                <i class="fas fa-info-circle"></i> This is a demonstration page. All video content is served via embedded players.
+            </p>
+        </footer>
+    </div>
 
     <script>
-        // Simple script to handle Monetag ad loading
-        // Replace this comment with your Monetag script
-        
-        // Example Monetag script (replace with your actual code):
-        // <script src="https://monetag.com/ad.js?your_publisher_id"></script>
-        // <div id="monetag-ad-container"></div>
-        
-        // Monitor iframe load
-        document.getElementById('videoFrame').addEventListener('load', function() {
-            console.log('Vortex: Player loaded successfully');
+        // Simple script to handle episode selection
+        document.querySelectorAll('.episode-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active class from all cards
+                document.querySelectorAll('.episode-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                
+                // Add active class to clicked card
+                this.classList.add('active');
+                
+                // Get episode number from the card
+                const episodeNum = this.querySelector('h4').textContent.replace('Episode ', '');
+                
+                // Update the iframe source (this is a simplified example)
+                // In reality, you would need to update the iframe src with the new episode URL
+                // document.getElementById('videoFrame').src = `https://cinemaos.tech/player/240411/1/${episodeNum}`;
+                
+                // For demo purposes, just show an alert
+                if(episodeNum !== '1') {
+                    alert(`In a real implementation, this would load Season 1, Episode ${episodeNum}.\n\nURL would be: https://cinemaos.tech/player/240411/1/${episodeNum}`);
+                }
+            });
         });
-        
-        // Handle window resize for responsive ads
-        window.addEventListener('resize', function() {
-            // Ad refresh logic could go here
+
+        // Handle iframe fullscreen tracking
+        document.getElementById('videoFrame').addEventListener('load', function() {
+            console.log('CinemaOS player loaded successfully');
         });
     </script>
 </body>
